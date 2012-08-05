@@ -85,6 +85,8 @@ In array notation, this looks like table\[numChars\]\[dice\].
 
 ## [Random Decimal Numbers](http://world.std.com/%7Ereinhold/dicewarefaq.html#decimal)
 
+You really don't need the table to use this method: Just roll a die until you get a number that isn't 6. Then roll the die again. If the second result is even, add 5 to the first number you got. Treat a ten as a zero. That's it.
+
 ## CONTRIBUTE
 
 If you'd like to hack on diceware, start by forking my repo on GitHub:

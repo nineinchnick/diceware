@@ -1,27 +1,23 @@
 <html>
-<head><title>PIN Generator</title></head>
+<head><title>Passphrase Generator</title></head>
 
 <body>
-<h1>PIN Number Generator</h1>
+<h1>Passphrase Generator</h1>
 <?php
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
   include './diceware.class.php';
-  $length = (empty($_POST['length'])) ? 4 : $_POST['length'];
-  $count = (empty($_POST['count'])) ? 1 : $_POST['count'];
+  $count = (empty($_POST['count'])) ? 5 : $_POST['count'];
   $dw = new Diceware();
 ?>
-<ul>
+<p>
 <?php
-  for($i=0; $i<$count; $i++) {
-    echo "<ul>".implode("",$dw->get_number($length))."</ul>";
-  }
+    echo implode(" ",$dw->get_phrase($count,false));
 ?>
-</ul>
+</p>
 
 <form action="index.php" method="post">
-<p>Length: <input type="number" name="length" value="<?php echo $length;?>" /></p>
 <p>Number: <input type="number" name="count" value="<?php echo $count;?>" /></p>
 <p><input type="submit" value="Generate" /></p>
 </form>

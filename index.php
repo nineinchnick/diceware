@@ -1,5 +1,8 @@
 <html>
-<head><title>Passphrase Generator</title></head>
+<head>
+<title>Passphrase Generator</title>
+<meta name="viewport" content="width=device-width/" >
+</head>
 
 <body>
 <h1>Passphrase Generator</h1>

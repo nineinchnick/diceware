@@ -1,5 +1,8 @@
 <html>
-<head><title>PIN Generator</title></head>
+<head>
+<title>PIN Generator</title>
+<meta name="viewport" content="width=device-width/" >
+</head>
 
 <body>
 <h1>PIN Number Generator</h1>

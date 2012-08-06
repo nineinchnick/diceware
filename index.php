@@ -7,27 +7,21 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
-	include './RandDotOrg.class.php';
-  $tr = new RandDotOrg('pin generator - joe@desertflood.com');
-  $num = (empty($_POST['length'])) ? 4 : $_POST['length'];
+  include './diceware.class.php';
+  $length = (empty($_POST['length'])) ? 4 : $_POST['length'];
   $count = (empty($_POST['count'])) ? 5 : $_POST['count'];
-  $min = 0;
-  $max = 9;
-  $base = 10;
-  $len = $num * $count;
-  $ar = $tr->get_integers($len, $min, $max, $base);
-  $str = implode("",$ar);
+  $dw = new Diceware();
 ?>
 <ul>
 <?php
-  for($i=0; $i<$len; $i=$i+$num) {
-    echo "<ul>".substr($str,$i,$num)."</ul>";
+  for($i=0; $i<$count; $i++) {
+    echo "<ul>".implode("",$dw->get_number($length))."</ul>";
   }
 ?>
 </ul>
 
 <form action="index.php" method="post">
-<p>Length: <input type="number" name="length" value="<?php echo $num;?>" /></p>
+<p>Length: <input type="number" name="length" value="<?php echo $length;?>" /></p>
 <p>Number: <input type="number" name="count" value="<?php echo $count;?>" /></p>
 <p><input type="submit" value="Generate" /></p>
 </form>

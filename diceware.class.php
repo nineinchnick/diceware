@@ -5,10 +5,11 @@ class Diceware {
   private $rolls;
   private $tr;
   private $char_table, $special_table, $pos_table;
+  private $word_list;
 
-  private $char_str = '[["~","&","+",":","?","4"],["!","*","[",";","/","5"],["#","(","]","\"","0","6"],["$",")","\\","\'","1","7"],["%","-","{","<","2","8"],["^","=","}",">","3","9"]]';
-  private $special_str = '[ ["!","@","#","$","%","^"], ["&","*","(",")","-","="], ["+","[","]","{","}","\\"], ["|","`",";",":","\'","\""], ["<",">","/","?",".",","], ["~","_","3","5","7","9"]]';
-  private $pos_str = '[ ["1","1","1","1","1"], ["2","2","2","2","2"], ["0","3","3","3","3"], ["1","0","4","4","4"], ["2","*","0","5","5"], ["0","*","*","0","6"] ]';
+  private $char_str = '[["~","&","+",":","?","4"],["!","*","[",";","/","5"],["#","(","]","\"","0","6"],["$",")","\\\\","\'","1","7"],["%","-","{","<","2","8"],["^","=","}",">","3","9"]]';
+  private $special_str = '[ ["!","@","#","$","%","^"], ["&","*","(",")","-","="], ["+","[","]","{","}","\\\\"], ["|","`",";",":","\'","\""], ["<",">","/","?",".",","], ["~","_","3","5","7","9"]]';
+  private $pos_str = '[ ["1","2","0","1","2","0"], ["1","2","3","0","*","*"], ["1","2","3","4","0","*"], ["1","2","3","4","5","0"], ["1","2","3","4","5","6"]]';
 
   private function get_rolls($num) {
     // can we fulfill the request?
@@ -46,18 +47,53 @@ class Diceware {
     return $result;
   }
 
-  public function get_phrase($length) {
+  public function get_phrase($length,$extra) {
     $rolls = 5*$length;
     $input = $this->get_rolls($rolls);
+    $output = array();
+    $wordn = "";
+    
+    if($extra) {
+      // pick a word
+      do {
+        $roll = $this->get_rolls(1);
+        $wordn = $roll[0];
+      } while ($wordn>$length);
+      $wordn = $wordn-1;
+      $rollc = $this->get_rolls(2);
+      $char = array($this->char_table[$rollc[0]-1][$rollc[1]-1]);
+    }
+
     // loop and handle every 5 numbers
-    // look up the word in the word list
-    // add the word to an output array
-    // get 4 more dice rolls
-    // get the right word
-    // get the right character
-    // look up the new character
-    // insert the character in the specified word
+    for($i=0; $i<$length; $i++) {
+      // get 5 numbers and convert them to a string
+      $dice = $this->get_rolls(5);
+      $num = implode("",$dice);
+      // look up the word in the word list
+      $word = $this->word_list[$num];
+      // get the right word
+      if($extra&&($i==$wordn)) {
+        do {
+          $roll = $this->get_rolls(1);
+          $roll = $roll[0];
+          // get the right character
+          $pos = $this->pos_table[strlen($word)][$roll-1];
+        } while ($pos=="*");
+        // insert the character in the specified word
+        $str = str_split($word);
+        array_splice($str,$pos,0,$char);
+        $word = implode("",$str);
+      }
+      // add the word to an output array
+      array_push($output,$word);
+    }
     // return the result
+    return $output;
+  }
+
+  public function get_character() {
+    $rolls = $this->get_rolls(2);
+    return $this->special_table[$rolls[0]][$rolls[1]];
   }
 
   function __construct() {
@@ -65,7 +101,8 @@ class Diceware {
     $this->rolls = array();
     $this->char_table = json_decode($this->char_str);
     $this->special_table = json_decode($this->special_str);
-    $this->number_table = json_decode($this->num_str);
+    $this->pos_table = json_decode($this->pos_str);
+    $this->word_list = json_decode(file_get_contents("diceware.wordlist.json"),true);
   }
 }
 ?>

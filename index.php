@@ -24,10 +24,6 @@
 <p>Number: <input type="number" name="count" value="<?php echo $count;?>" /></p>
 <p><input type="submit" value="Generate" /></p>
 </form>
-<div>
-<p>
-<a href="index.php">Passphrase</a> | <a href="pin.php">PIN</a>
-</p>
-</div>
+<?php include 'footer.php'; ?>
 </body>
 </html>

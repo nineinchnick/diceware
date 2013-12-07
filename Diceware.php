@@ -1,6 +1,6 @@
 <?php
 
-namespace nineinchnick\diceware
+namespace nineinchnick\diceware;
 
 /**
  * @author Jan Was <jwas@nets.com.pl>

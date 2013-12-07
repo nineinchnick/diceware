@@ -1,6 +1,11 @@
 <?php
-include './RandDotOrg.class.php';
 
+namespace nineinchnick\diceware
+
+/**
+ * @author Jan Was <jwas@nets.com.pl>
+ * @link https://github.com/nineinchnick/diceware
+ */
 class Diceware {
   private $rolls;
   private $char_table, $special_table, $pos_table;
@@ -169,7 +174,7 @@ class Diceware {
 	  $handle = @fopen($file, "r");
 	  if ($handle) {
 		  while (($buffer = fgets($handle, 4096)) !== false) {
-			  $parts = explode(' ',trim($buffer),2);
+			  $parts = explode(' ',str_replace("\t",' ',trim($buffer)),2);
 			  if (count($parts)>1) {
 				  $output[$parts[0]] = $parts[1];
 			  }
@@ -182,12 +187,18 @@ class Diceware {
 	  return $output;
   }
 
-  function __construct() {
+  function __construct($language=null) {
     $this->rolls = array();
     $this->char_table = json_decode($this->char_str);
     $this->special_table = json_decode($this->special_str);
     $this->pos_table = json_decode($this->pos_str);
-    $this->word_list = $this->get_words(dirname(__FILE__).DIRECTORY_SEPARATOR."diceware.wordlist");
+	$path = dirname(__FILE__).DIRECTORY_SEPARATOR;
+	if ($language !== null && file_exists($path."diceware.$language.wordlist")) {
+		$wordlist = $path."diceware.$language.wordlist";
+	} else {
+		$wordlist = $path."diceware.wordlist";
+	}
+    $this->word_list = $this->get_words($wordlist);
   }
 }
 
